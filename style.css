@@ -6,7 +6,7 @@
 }
 
 body {
-    background: rgb(88, 153, 206);
+    background: rgb(175, 161, 201);
     min-height: 100vh;
     display: flex;
     align-items: center;
@@ -39,6 +39,57 @@ body {
 }
 
 #AddUpdateClick {
-    width: 50px;
+    width: 70px;
     height: auto;
+}
+
+.todo-body {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #e0dddd;
+    border-radius: 30px;
+    padding-left: 20px;
+    margin-bottom: 20px;
+}
+
+.todo-body input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    padding: 15px 0;
+    font-size: 20px;
+}
+
+.todo-body img {
+    cursor: pointer;
+    height: 55px;
+    width: 55px;
+    padding: 5px;
+    background: #e0c8f7;
+    border-radius: 40px;
+}
+
+ul li {
+    list-style: none;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 10px;
+}
+
+li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #e0dddd;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+.todo-controls {
+    width: 25px;
+    height: 25px;
+    padding: 3px;
+    margin-right: 5px;
 }

@@ -13,15 +13,17 @@
     <div class="todo-header">
       <h2>ToDo List</h2>
       <div class="book">
-        <img src="/images/book_writing.gif"/>
+        <img src="/images/book_writing.gif" />
       </div>
     </div>
 
     <div class="todo-body">
       <input type="text" id="todoText" class="todo-input" placeholder="Add your task" />
-      <img src="images/plus_sign.png" alt="+" id="AddUpdateClick"
+      <img src="images/plus_sign.png" alt="+" id="AddUpdateClick" onclick="CreateToDoData()">
     </div>
+    <ul id="list-items" class="list-items"></ul>
   </div>
+  <script type="text/javascript" src="script.js"></script>
 </body>
 
 </html>
