@@ -94,3 +94,12 @@ li {
     padding: 3px;
     margin-right: 5px;
 }
+
+.version {
+  position: fixed;
+  bottom: 10px;
+  width: 100%;
+  text-align: center;
+  color: rgb(58, 44, 86);
+  font-size: 14px;
+}

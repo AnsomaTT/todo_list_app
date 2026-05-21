@@ -69,8 +69,10 @@ function UpdateToDItems(e) {
 }
 
 function DeleteToDoItems(e) {
-    if (confirm("Are you sure? Do you want to delete this task!")) {
-
+    let deleteValue =
+        e.parentElement.parentElement.querySelector("div").innerText;
+    if (confirm(`Are you sure? Do you want to delete ${deleteValue}?`)) {
+        e.parentElement.parentElement.parentElement.querySelector("li").remove();
     }
 }
 
