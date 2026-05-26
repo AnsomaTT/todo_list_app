@@ -3,6 +3,8 @@ const todoValue = document.getElementById("todoText"),
     listItems = document.getElementById("list-items"),
     addUpdateClick = document.getElementById("AddUpdateClick");
 let updateText
+// Get saved todo data from localStorage
+let todoData = JSON.parse(localStorage.getItem("todoData"))
 
 
 // Detect when Enter key is pressed in the input field and automatically click the add/update button
@@ -11,6 +13,18 @@ todoValue.addEventListener("keypress", function (e) {
         addUpdateClick.click();
     }
 });
+
+// Loop through saved todos and add each one to the list on the page
+ReadToDoItems();
+function ReadToDoItems() {
+    console.log(todoData);
+    todoData.forEach(element => {
+        let li = document.createElement("li");
+        const todoItems = `<div onclick="UpdateToDItems(this)>${element.item}</div>`;
+        li.innerHTML = todoItems;
+        listItems.appendChild(li);
+    });
+}
 
 // Create a new todo item and check first if the input field is empty
 function CreateToDoData() {
@@ -36,6 +50,15 @@ function CreateToDoData() {
     li.innerHTML = todoItems;
     listItems.appendChild(li);
     todoValue.value = "";
+
+
+    // If no todo data exists, create an empty list
+    if (!todoData) {
+        todoData = [];
+    }
+    let dataItem = { item: todoData.value, status: false }
+    todoData.push(dataItem);
+
 }
 //Adds and removes a line through the todo text when clicked
 function CompleteTodoItems(e) {
