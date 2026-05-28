@@ -14,13 +14,18 @@ todoValue.addEventListener("keypress", function (e) {
     }
 });
 
-// Loop through saved todos and add each one to the list on the page
+// Display all todo items from todoData on the webpage
+// Add a line through style to completed items and show them in the list
 ReadToDoItems();
 function ReadToDoItems() {
     console.log(todoData);
     todoData.forEach(element => {
         let li = document.createElement("li");
-        const todoItems = `<div onclick="UpdateToDItems(this)>${element.item}</div>`;
+        let style = "";
+        if (element.status) {
+            style = "style='text-decoration: line-through'";
+        }
+        const todoItems = `<div ${style} ondblclick="CompleteToDoItems(this)">${element.item}${style === "" ? '<img class="edit todo-controls" onclick="UpdateToDoItems(this)" />'}</div>`;
         li.innerHTML = todoItems;
         listItems.appendChild(li);
     });
@@ -67,6 +72,14 @@ function CompleteTodoItems(e) {
     } else {
         e.style.textDecoration = "line-through";
     }
+
+
+    // Loop through todoData and mark the matching todo item as completed
+    todoData.forEach((element) => {
+        if (e.parentElement.querySelector("div").innerText.trim() == element.item) {
+            element.status = true;
+        }
+    });
 
 }
 
