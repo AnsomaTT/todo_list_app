@@ -1,16 +1,17 @@
-//Get and store important HTML elements so they can be used later in the app
-const todoValue = document.getElementById("todoText"),
-    listItems = document.getElementById("list-items"),
-    addUpdateClick = document.getElementById("AddUpdateClick");
+// Get and store important HTML elements so they can be used later in the script
+const taskInput = document.getElementById("taskInput");
+const taskList = document.getElementById("taskList");
+const addTaskBtn = document.getElementById("addTaskBtn");
+
 let updateText
 // Get saved todo data from localStorage
 let todoData = JSON.parse(localStorage.getItem("todoData"))
 
 
 // Detect when Enter key is pressed in the input field and automatically click the add/update button
-todoValue.addEventListener("keypress", function (e) {
+taskInput.addEventListener("keypress", function (e) {
     if (e.key === "Enter") {
-        addUpdateClick.click();
+        addTaskBtn.click();
     }
 });
 
@@ -21,31 +22,40 @@ function ReadToDoItems() {
     todoData.forEach((element) => {
         let li = document.createElement("li");
         let style = "";
-        if (element.status) {
+
+        // If this task is marked as completed in localStorage, display it crossed out in the UI
+        if (element.isComplete) {
             style = "style='text-decoration: line-through'";
         }
-        const todoItems = `<div ${style} ondblclick="CompleteToDoItems(this)">${element.item
-            }${style === ""
+
+        const todoItems = `<div ${style} ondblclick="CompleteToDoItems(this)">
+            ${element.item}${style === ""
                 ? '<img class="edit todo-controls" onclick="UpdateToDoItems(this)" src="/images/pencil.png" />'
                 : ""
-            }<img class="delete todo-controls" onclick="DeleteToDoItems(this)" src=/images/delete.png" /></div>`;
+            }<img class="delete todo-controls" onclick="DeleteToDoItems(this)" src="/images/delete.png" /></div>`;
         li.innerHTML = todoItems;
-        listItems.appendChild(li);
+        taskList.appendChild(li);
     });
 }
 
-// Create a new todo item and check first if the input field is empty
+/**
+ * CreateToDoData Function
+ * 
+ *
+ * @param {} 
+ * @returns {}
+ */
 function CreateToDoData() {
     //
-    if (todoValue.value === "") {
+    if (taskInput.value === "") {
         alert("Please Enter your todo text!");
-        todoValue.focus();
+        taskInput.focus();
     }
 
     //Create a new list item (li) and define its HTML content for the todo text and action buttons. Edit/Delete
     //Clicking the todo text marks the task as completed by toggling a line-through style
     let li = document.createElement("li");
-    const todoItems = `<div ondblclick="CompleteTodoItems(this)">${todoValue.value}</div>
+    const todoItems = `<div ondblclick="CompleteTodoItems(this)">${taskInput.value}</div>
         <div>
             <img class="edit todo-controls" onclick="UpdateToDoItems(this)" src="images/pencil.png" />
             <img class="delete todo-controls" onclick="DeleteToDoItems(this)" src="images/delete.png"/>
@@ -53,44 +63,73 @@ function CreateToDoData() {
 
     //Insert todo content into the new list item and display it in the list. Then reset the input for the next entry
     li.innerHTML = todoItems;
-    listItems.appendChild(li);
-    todoValue.value = "";
+    taskList.appendChild(li);
 
+    const taskText = taskInput.value;
 
     // If no todo data exists, create an empty list
     if (!todoData) {
         todoData = [];
     }
-    let dataItem = { item: todoData.value, status: false }
+    let dataItem = {
+        item: taskInput.value,
+        isComplete: false
+    };
+
     todoData.push(dataItem);
 
+    taskInput.value = "";
+    setLocalStorage();
 }
-//Adds and removes a line through the todo text when clicked
+
+/**
+ * CompleteTodoItems Function
+ * Toggles the completion state of a todo item on double-click.
+ * Applies or removes strikethrough styling and shows/hides the edit button accordingly.
+ *
+ * @param {HTMLElement} e - The clicked todo element
+ * @returns {void} - Nothing
+ */
 function CompleteTodoItems(e) {
-    if (e.style.textDecoration === "line-through") {
-        e.style.textDecoration = "none";
+    // Get the edit button inside the todo item container
+    const editBtn = e.parentElement.querySelector("img.edit");
+
+    // Change the status of the todo item
+    if (e.isComplete == true) {
+        e.isComplete = false
     } else {
-        e.style.textDecoration = "line-through";
+        e.isComplete = true
     }
 
+    // Applies or removes strikethrough styling and shows/hides the edit button accordingly.
+    if (e.isComplete == true) {
+        e.style.textDecoration = "none";
+        if (editBtn) editBtn.style.display = "inline-block";
+    } else {
+        e.style.textDecoration = "line-through";
+        if (editBtn) editBtn.style.display = "none";
+    }
 
-    // Loop through todoData and mark the matching todo item as completed
-    todoData.forEach((element) => {
-        if (e.parentElement.querySelector("div").innerText.trim() == element.item) {
-            element.status = true;
-        }
-    });
-
+    // TODO: Save the current completion state of each task in localStorage
+    //todoData.forEach((element) => {
+    //    if (e.parentElement.querySelector("div").innerText.trim() === element.item) {
+    //        element.isComplete = true;
+    //    }
+    //});
 }
 
 
 function UpdateOnSelectionItems() {
-    updateText.innerText = todoValue.value;
 
-    todoValue.value = "";
 
-    addUpdateClick.setAttribute("onclick", "CreateToDoData()");
-    addUpdateClick.setAttribute("src", "/images/plus.png");
+    todoData.forEach(element => {
+        if (element.item == updateText.innerText.trim()) {
+            element.item = taskInput.value;
+        }
+    });
+
+    setLocalStorage();
+    taskInput.value = "";
 }
 
 
@@ -98,10 +137,10 @@ function UpdateOnSelectionItems() {
 function UpdateToDoItems(e) {
     updateText = e.parentElement.parentElement.querySelector("div");
 
-    todoValue.value = updateText.innerText;
+    taskInput.value = updateText.innerText;
 
-    addUpdateClick.setAttribute("onclick", "UpdateOnSelectionItems()");
-    addUpdateClick.setAttribute("src", "/images/refresh.png");
+    addTaskBtn.setAttribute("onclick", "UpdateOnSelectionItems()");
+    addTaskBtn.setAttribute("src", "/images/refresh.png");
 }
 
 function DeleteToDoItems(e) {
@@ -109,14 +148,17 @@ function DeleteToDoItems(e) {
         e.parentElement.parentElement.querySelector("div").innerText;
     if (confirm(`Are you sure? Do you want to delete ${deleteValue}?`)) {
         e.parentElement.parentElement.parentElement.querySelector("li").remove();
-        todoValue.focus();
+        taskInput.focus();
 
         todoData.forEach((element) => {
             if (element.item == deleteValue.trim()) {
                 todoData.splice(element, 1);
             }
-        })
+        });
+        setLocalStorage();
     }
 }
 
-
+function setLocalStorage() {
+    localStorage.setItem("todoData", JSON.stringify(todoData));
+}

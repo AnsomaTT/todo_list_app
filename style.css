@@ -38,7 +38,7 @@ body {
 
 }
 
-#AddUpdateClick {
+#addTaskBtn {
     width: 70px;
     height: auto;
 }
@@ -102,4 +102,8 @@ li {
   text-align: center;
   color: rgb(58, 44, 86);
   font-size: 14px;
+}
+
+li div {
+    user-select: none;
 }
