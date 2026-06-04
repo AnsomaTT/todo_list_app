@@ -18,14 +18,17 @@ todoValue.addEventListener("keypress", function (e) {
 // Add a line through style to completed items and show them in the list
 ReadToDoItems();
 function ReadToDoItems() {
-    console.log(todoData);
-    todoData.forEach(element => {
+    todoData.forEach((element) => {
         let li = document.createElement("li");
         let style = "";
         if (element.status) {
             style = "style='text-decoration: line-through'";
         }
-        const todoItems = `<div ${style} ondblclick="CompleteToDoItems(this)">${element.item}${style === "" ? '<img class="edit todo-controls" onclick="UpdateToDoItems(this)" />'}</div>`;
+        const todoItems = `<div ${style} ondblclick="CompleteToDoItems(this)">${element.item
+            }${style === ""
+                ? '<img class="edit todo-controls" onclick="UpdateToDoItems(this)" src="/images/pencil.png" />'
+                : ""
+            }<img class="delete todo-controls" onclick="DeleteToDoItems(this)" src=/images/delete.png" /></div>`;
         li.innerHTML = todoItems;
         listItems.appendChild(li);
     });
@@ -42,12 +45,9 @@ function CreateToDoData() {
     //Create a new list item (li) and define its HTML content for the todo text and action buttons. Edit/Delete
     //Clicking the todo text marks the task as completed by toggling a line-through style
     let li = document.createElement("li");
-    const todoItems = `
-        <div onclick="CompleteTodoItems(this)">
-            ${todoValue.value}
-        </div>
+    const todoItems = `<div ondblclick="CompleteTodoItems(this)">${todoValue.value}</div>
         <div>
-            <img class="edit todo-controls" onclick="UpdateToDItems(this)" src="images/pencil.png" />
+            <img class="edit todo-controls" onclick="UpdateToDoItems(this)" src="images/pencil.png" />
             <img class="delete todo-controls" onclick="DeleteToDoItems(this)" src="images/delete.png"/>
         </div>`;
 
@@ -95,7 +95,7 @@ function UpdateOnSelectionItems() {
 
 
 //Change the add button into an update button when editing a todo item
-function UpdateToDItems(e) {
+function UpdateToDoItems(e) {
     updateText = e.parentElement.parentElement.querySelector("div");
 
     todoValue.value = updateText.innerText;
@@ -109,6 +109,13 @@ function DeleteToDoItems(e) {
         e.parentElement.parentElement.querySelector("div").innerText;
     if (confirm(`Are you sure? Do you want to delete ${deleteValue}?`)) {
         e.parentElement.parentElement.parentElement.querySelector("li").remove();
+        todoValue.focus();
+
+        todoData.forEach((element) => {
+            if (element.item == deleteValue.trim()) {
+                todoData.splice(element, 1);
+            }
+        })
     }
 }
 
