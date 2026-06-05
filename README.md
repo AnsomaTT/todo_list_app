@@ -16,7 +16,7 @@ Die Anwendung ermöglicht es, Aufgaben zu erstellen, zu bearbeiten, zu löschen 
 
 ## Screenshot
 
-![To-Do App](Screenshot(28).png)
+![To-Do App](todo-app.png)
 
 ## Verwendete Technologien
 
