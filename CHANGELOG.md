@@ -1,8 +1,10 @@
 # Changelog
 
-## UNRELEASED
-- ongoing improvements
-- bug fixes and learning updates
+## v1.1.2
+- fixed a bug that allowed users to add empty tasks
+- change the variable names for creating task function
+- add comment and optimize functions for creating task
+- add readme.md
 
 ---
 

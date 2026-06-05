@@ -1,12 +1,23 @@
-// Get and store important HTML elements so they can be used later in the script
+
+// ==========================================
+// VARIABLES
+// ==========================================
+
+// Get and store important HTML elements so they can be used later in JavaScript
 const taskInput = document.getElementById("taskInput");
 const taskList = document.getElementById("taskList");
 const addTaskBtn = document.getElementById("addTaskBtn");
 
+// Variable used to temporarily store updated task text
 let updateText
-// Get saved todo data from localStorage
-let todoData = JSON.parse(localStorage.getItem("todoData"))
 
+// Get saved tasks from localStorage
+let storedTasks = JSON.parse(localStorage.getItem("storedTasks"))
+console.log("storedTasks ", storedTasks)
+
+// ==========================================
+// EVENT LISTENERS
+// ==========================================
 
 // Detect when Enter key is pressed in the input field and automatically click the add/update button
 taskInput.addEventListener("keypress", function (e) {
@@ -15,11 +26,25 @@ taskInput.addEventListener("keypress", function (e) {
     }
 });
 
-// Display all todo items from todoData on the webpage
-// Add a line through style to completed items and show them in the list
+
+
+// ==========================================
+// INITIAL PAGE LOAD
+// ==========================================
+
+// Display all saved tasks when the page loads
 ReadToDoItems();
+
+
+
+// ==========================================
+// FUNCTIONS
+// ==========================================
+
+// Display all todo items from storedTasks on the webpage
+// Add a line through style to completed items and show them in the list
 function ReadToDoItems() {
-    todoData.forEach((element) => {
+    storedTasks.forEach((element) => {
         let li = document.createElement("li");
         let style = "";
 
@@ -39,58 +64,80 @@ function ReadToDoItems() {
 }
 
 /**
- * CreateToDoData Function
- * 
- *
- * @param {} 
- * @returns {}
+ * Handles the Add Task button click
+ * - Validates input
+ * - Create new task + renders it in the UI + saves it to localStorage
+ * - Clears the input field
  */
-function CreateToDoData() {
-    //
+function OnAddTaskClick() {
+    // Check if the task input field is empty
+    // If it is, display an alert message and stop the function
     if (taskInput.value === "") {
-        alert("Please Enter your todo text!");
-        taskInput.focus();
+        return alert("Please Enter your todo text!");
     }
 
-    //Create a new list item (li) and define its HTML content for the todo text and action buttons. Edit/Delete
-    //Clicking the todo text marks the task as completed by toggling a line-through style
-    let li = document.createElement("li");
-    const todoItems = `<div ondblclick="CompleteTodoItems(this)">${taskInput.value}</div>
+    const taskText = taskInput.value;
+
+    // Create a new task item (li) and define its HTML content for the task text and action buttons (Edit/Delete)
+    // Clicking the task text marks the task as completed by toggling a line-through style
+    let newTaskItem = createTaskElement(taskText)
+    
+    // Add the newTaskItem inside the taskList
+    taskList.appendChild(newTaskItem);
+  
+    // Call the function to create and save the new task in the local storage
+    saveNewTaskInLocalStorage(taskText)
+
+    // Reset the input field so the user can type a new task
+    taskInput.value = "";
+}
+
+/**
+ * Creates a HTML element (li) for a task item
+ * Including the task text and action buttons (edit/delete)
+ *
+ * @param {string} taskText - The text content of the task
+ * @returns {HTMLElement} The created list item element
+ */
+function CreateTaskElement(taskText) {
+    let newTaskItem = document.createElement("li");
+    newTaskItem.innerHTML = `<div ondblclick="CompleteTask(this)">${taskText}</div>
         <div>
             <img class="edit todo-controls" onclick="UpdateToDoItems(this)" src="images/pencil.png" />
             <img class="delete todo-controls" onclick="DeleteToDoItems(this)" src="images/delete.png"/>
         </div>`;
 
-    //Insert todo content into the new list item and display it in the list. Then reset the input for the next entry
-    li.innerHTML = todoItems;
-    taskList.appendChild(li);
+    return newTaskItem;
+}
 
-    const taskText = taskInput.value;
-
-    // If no todo data exists, create an empty list
-    if (!todoData) {
-        todoData = [];
-    }
-    let dataItem = {
-        item: taskInput.value,
+/**
+ * Creates a new task object and saves it to the storedTasks list
+ * Then updates localStorage
+ *
+ * @param {string} taskText - The text of the new task
+ */
+function SaveNewTaskInLocalStorage(taskText){
+    // Create a new task object for the local storage
+    let newTaskData = {
+        taskText: taskText,
         isComplete: false
     };
 
-    todoData.push(dataItem);
+    // Add the new task to the stored tasks list
+    storedTasks.push(newTaskData);
 
-    taskInput.value = "";
+    // Save the current tasks list to localStorage
     setLocalStorage();
 }
 
 /**
- * CompleteTodoItems Function
+ * CompleteTaskItems Function
  * Toggles the completion state of a todo item on double-click.
  * Applies or removes strikethrough styling and shows/hides the edit button accordingly.
  *
  * @param {HTMLElement} e - The clicked todo element
- * @returns {void} - Nothing
  */
-function CompleteTodoItems(e) {
+function CompleteTask(e) {
     // Get the edit button inside the todo item container
     const editBtn = e.parentElement.querySelector("img.edit");
 
@@ -111,7 +158,7 @@ function CompleteTodoItems(e) {
     }
 
     // TODO: Save the current completion state of each task in localStorage
-    //todoData.forEach((element) => {
+    //storedTasks.forEach((element) => {
     //    if (e.parentElement.querySelector("div").innerText.trim() === element.item) {
     //        element.isComplete = true;
     //    }
@@ -122,7 +169,7 @@ function CompleteTodoItems(e) {
 function UpdateOnSelectionItems() {
 
 
-    todoData.forEach(element => {
+    storedTasks.forEach(element => {
         if (element.item == updateText.innerText.trim()) {
             element.item = taskInput.value;
         }
@@ -150,9 +197,9 @@ function DeleteToDoItems(e) {
         e.parentElement.parentElement.parentElement.querySelector("li").remove();
         taskInput.focus();
 
-        todoData.forEach((element) => {
+        storedTasks.forEach((element) => {
             if (element.item == deleteValue.trim()) {
-                todoData.splice(element, 1);
+                storedTasks.splice(element, 1);
             }
         });
         setLocalStorage();
@@ -160,5 +207,5 @@ function DeleteToDoItems(e) {
 }
 
 function setLocalStorage() {
-    localStorage.setItem("todoData", JSON.stringify(todoData));
+    localStorage.setItem("storedTasks", JSON.stringify(storedTasks));
 }
