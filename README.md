@@ -14,6 +14,10 @@ Die Anwendung ermöglicht es, Aufgaben zu erstellen, zu bearbeiten, zu löschen 
 * Aufgaben als erledigt markieren
 * Speicherung der Daten mit Local Storage
 
+## Screenshot
+
+![To-Do App](Screenshot(28).png)
+
 ## Verwendete Technologien
 
 * HTML
