@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.1.3
+- improved task creation logic
+- fixed task completion on the UI on the double click
+- improved saving of tasks to localStorage
+- fixed creation of the UI of tasks from localStorage on page load
+
+---
+
 ## v1.1.2
 - fixed a bug that allowed users to add empty tasks
 - change the variable names for creating task function
