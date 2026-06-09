@@ -8,25 +8,25 @@ const taskInput = document.getElementById("taskInput");
 const taskList = document.getElementById("taskList");
 const addTaskBtn = document.getElementById("addTaskBtn");
 
-// TODO
-// Variable used to temporarily store updated task text
-let updateText
+// Variable used to temporarily store the element that is going to be edited
+let storedTaskTextElement = null
 
 // Get saved tasks from localStorage
 let storedTasks = GetLocalStorageTasksValue()
+
+
 
 // ==========================================
 // EVENT LISTENERS
 // ==========================================
 
-// TODO
 // Detect when Enter key is pressed in the input field and automatically click the add/update button
-taskInput.addEventListener("keypress", function (e) {
-    if (e.key === "Enter") {
+taskInput.addEventListener("keypress", function (keyboardEvent) {
+    if (keyboardEvent.key === "Enter") {
+        // Call the function set to the addTaskBtn (Add or Edit task)
         addTaskBtn.click();
     }
 });
-
 
 
 // ==========================================
@@ -99,7 +99,7 @@ function OnAddTaskClick() {
     // Check if the task input field is empty
     // If it is, display an alert message and stop the function
     if (taskText === "") {
-        return alert("Please Enter your todo text!");
+        return alert("Please Enter your task text!");
     }
 
     // Create a new task item (li) and define its HTML content for the task text and action buttons (Edit/Delete)
@@ -127,8 +127,8 @@ function CreateTaskElement(taskText) {
     let newTaskItem = document.createElement("li");
     newTaskItem.innerHTML = `<div class="task-text" ondblclick="CompleteTask(this)">${taskText}</div>
         <div class="task-actions">
-            <img class="edit todo-controls" onclick="UpdateToDoItems(this)" src="images/pencil.png" />
-            <img class="delete todo-controls" onclick="DeleteToDoItems(this)" src="images/delete.png"/>
+            <img class="edit task-controls" onclick="UpdateTask(this)" src="images/pencil.png" />
+            <img class="delete task-controls" onclick="DeleteTask(this)" src="images/delete.png"/>
         </div>`;
 
     return newTaskItem;
@@ -159,23 +159,22 @@ function SaveNewTaskInLocalStorage(taskText) {
 /**
  * Toggles the completion state of a task
  *
- * @param {HTMLElement} taskElement - The task element
+ * @param {HTMLElement} taskTextElement - The task text element
  */
-function CompleteTask(taskElement) {
+function CompleteTask(taskTextElement) {
+    console.log("taskElement", taskTextElement)
     // Search the task to complete by his text from the local storage list tasks
-    storedTasks.forEach((savedTask) => {
-        if (taskElement.parentElement.querySelector("div").innerText.trim() === savedTask.taskText) {
-            // Switch the status of the task
-            if (savedTask.isComplete == true) {
-                savedTask.isComplete = false
-            } else {
-                savedTask.isComplete = true
-            }
+    correspondingTask = SearchTaskFromStoredTasks(taskTextElement.innerText)
 
-            // Applies or removes strike through styling and shows/hides the edit button accordingly
-            ApplyTaskCompletionUI(taskElement, savedTask.isComplete)
-        }
-    });
+    // Switch the status of the task
+    if (correspondingTask.isComplete == true) {
+        correspondingTask.isComplete = false
+    } else {
+        correspondingTask.isComplete = true
+    }
+
+    // Applies or removes strike through styling and shows/hides the edit button accordingly
+    ApplyTaskCompletionUI(taskTextElement, correspondingTask.isComplete)
 
     // Save the current tasks list to localStorage
     SetLocalStorageTasksValue();
@@ -186,65 +185,107 @@ function CompleteTask(taskElement) {
  * Updates the task UI based on its completion state
  * Applies strikethrough styling and toggles the edit button
  *
- * @param {HTMLElement} taskElement - The task element
+ * @param {HTMLElement} taskTextElement - The task text element
  * @param {boolean} isComplete - Whether the task is completed
  */
-function ApplyTaskCompletionUI(taskElement, isComplete) {
+function ApplyTaskCompletionUI(taskTextElement, isComplete) {
     // Get the edit button inside the task element
-    const li = taskElement.closest("li");
-    const editBtn = li.querySelector("img.edit");
-    console.log("editBtn", editBtn)
+    const editBtn = taskTextElement.parentElement.querySelector("img.edit");
 
     // Applies or removes strike through styling and shows/hides the edit button
     if (isComplete == false) {
-        taskElement.style.textDecoration = "none";
+        taskTextElement.style.textDecoration = "none";
         editBtn.style.display = "inline-block";
     } else {
-        taskElement.style.textDecoration = "line-through";
+        taskTextElement.style.textDecoration = "line-through";
         editBtn.style.display = "none";
     }
 
     console.log("editBtn after applis style", editBtn)
 }
 
-// TODO
-function UpdateOnSelectionItems() {
-
-
-    storedTasks.forEach(element => {
-        if (element.item == updateText.innerText.trim()) {
-            element.item = taskInput.value;
-        }
-    });
-
+/**
+ * Updates the text content of a selected task
+ * Searches through the stored tasks, then updates the matching task
+ * Saves the changes to Local Storage
+ */
+function EditTaskText() {
+    // Search the task from the copy of the local storage
+    taskToEdit = SearchTaskFromStoredTasks(storedTaskTextElement.innerText);
+    // Change the text of the object task for the local storage
+    taskToEdit.taskText = taskInput.value
+    // Save the current tasks list to localStorage
     SetLocalStorageTasksValue();
+
+    // Send the edited text from the input to the task text element that is beeing edited
+    storedTaskTextElement.innerText = taskInput.value
+    // Clears the input field
     taskInput.value = "";
+
+    // Change the function that is called when you click on the button
+    addTaskBtn.setAttribute("onclick", `OnAddTaskClick()`);
+    // Change the picture of the add button to plus picture
+    addTaskBtn.setAttribute("src", "/images/plus.png");
 }
 
-// TODO
-//Change the add button into an update button when editing a todo item
-function UpdateToDoItems(e) {
-    updateText = e.parentElement.parentElement.querySelector("div");
+/**
+ * Allows a task to be edited
+ * Displays the selected task text in the input field
+ * Then changes the button to update the task when clicked
+ *
+ * @param {HTMLElement} editButtonElement - The editButton element
+ */
+function UpdateTask(editButtonElement) {
+    // Search the div that contains the text of the task
+    const textElement = editButtonElement.parentElement.parentElement.querySelector(".task-text");
+    // Put the text of the task that is going to be edited inside the input
+    taskInput.value = textElement.innerText;
 
-    taskInput.value = updateText.innerText;
+    // Save the task text element in a global variable for later use
+    storedTaskTextElement = textElement;
 
-    addTaskBtn.setAttribute("onclick", "UpdateOnSelectionItems()");
+    // Change the function that is called when you click on the button
+    addTaskBtn.setAttribute("onclick", `EditTaskText()`);
+    // Change the picture of the add button to refresh picture
     addTaskBtn.setAttribute("src", "/images/refresh.png");
 }
 
-// TODO
-function DeleteToDoItems(e) {
-    let deleteValue =
-        e.parentElement.parentElement.querySelector("div").innerText;
-    if (confirm(`Are you sure? Do you want to delete ${deleteValue}?`)) {
-        e.parentElement.parentElement.parentElement.querySelector("li").remove();
-        taskInput.focus();
+/**
+ * Deletes a selected task
+ * Removes the task from the page, then updates the stored task list
+ * Saves the changes to Local Storage after confirmation
+ *
+ * @param {HTMLElement} deleteButtonElement - The deleteButtonElement element
+ */
+function DeleteTask(deleteButtonElement) {
+    // Search the whole line that contain all the element of the task
+    const elementToDelete = deleteButtonElement.parentElement.parentElement;
 
-        storedTasks.forEach((element) => {
-            if (element.item == deleteValue.trim()) {
-                storedTasks.splice(element, 1);
-            }
-        });
+    // Search the text of the task that we want to delete
+    const textTaskToDelete = elementToDelete.querySelector(".task-text").innerText;
+
+    // Display a message asking if the user is sure to delete the task
+    if (confirm(`Are you sure? Do you want to delete ${textTaskToDelete}?`)) {
+        // Filter the copy of the local storage to remove the task to delete
+        storedTasks = storedTasks.filter(
+            task => task.taskText !== textTaskToDelete
+        );
+
+        // Save the current tasks list to localStorage
         SetLocalStorageTasksValue();
+
+        // Remove the task from the UI
+        elementToDelete.remove();
     }
+}
+
+/**
+ * Search the task object from the local storage copy that match the text of a given task text element
+ * Return the task object found
+ *
+ * @param {string} taskText - The text of the task to search in the list
+ * @returns {taskObject} - The saved task from the local storage copy
+ */
+function SearchTaskFromStoredTasks(taskText) {
+    return storedTasks.find(savedTask => savedTask.taskText === taskText);
 }
