@@ -1,5 +1,20 @@
 # Changelog
 
+## v2.0.0
+- Complete CRUD functionality implemented (create, read, update, delete tasks)
+- App is fully usable end-to-end
+- Core stability and persistence improved
+- Ongoing UI and animation refinements planned
+
+---
+
+## v1.1.4
+- Fixed task editing not updating correctly
+- Fixed task deletion issues
+- Improved localStorage synchronization to keep tasks consistent after changes
+
+---
+
 ## v1.1.3
 - improved task creation logic
 - fixed task completion on the UI on the double click
