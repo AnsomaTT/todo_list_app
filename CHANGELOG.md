@@ -1,5 +1,11 @@
 # Changelog
 
+## v2.0.1
+- Add task input feedback messages 
+- Update UI background
+
+---
+
 ## v2.0.0
 - Complete CRUD functionality implemented (create, read, update, delete tasks)
 - App is fully usable end-to-end
