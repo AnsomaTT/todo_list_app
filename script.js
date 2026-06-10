@@ -7,6 +7,7 @@
 const taskInput = document.getElementById("taskInput");
 const taskList = document.getElementById("taskList");
 const addTaskBtn = document.getElementById("addTaskBtn");
+const AlertMessage = document.getElementById("AlertMessage");
 
 // Variable used to temporarily store the element that is going to be edited
 let storedTaskTextElement = null
@@ -22,7 +23,10 @@ let storedTasks = GetLocalStorageTasksValue()
 
 // Detect when Enter key is pressed in the input field and automatically click the add/update button
 taskInput.addEventListener("keypress", function (keyboardEvent) {
+    SetAlertMessage("");
+
     if (keyboardEvent.key === "Enter") {
+        SetAlertMessage("Task item created succesfully.")
         // Call the function set to the addTaskBtn (Add or Edit task)
         addTaskBtn.click();
     }
@@ -99,7 +103,7 @@ function OnAddTaskClick() {
     // Check if the task input field is empty
     // If it is, display an alert message and stop the function
     if (taskText === "") {
-        return alert("Please Enter your task text!");
+        return SetAlertMessage("Please Enter your task text!");
     }
 
     // Create a new task item (li) and define its HTML content for the task text and action buttons (Edit/Delete)
@@ -288,4 +292,14 @@ function DeleteTask(deleteButtonElement) {
  */
 function SearchTaskFromStoredTasks(taskText) {
     return storedTasks.find(savedTask => savedTask.taskText === taskText);
+}
+
+
+function SetAlertMessage(message) {
+    AlertMessage.removeAttribute("class");
+    AlertMessage.innerText = message;
+
+    setTimeout(() => {
+        AlertMessage.classList.add("toggleMe");
+    }, 1000);
 }

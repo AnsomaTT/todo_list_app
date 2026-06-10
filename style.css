@@ -1,20 +1,26 @@
+@font-face {
+    font-family: "Nunito Sans";
+    src: url("fonts/NunitoSans-VariableFont.ttf");
+    font-weight: 100 900;
+}
+
 * {
+    font-family: "Nunito Sans", sans-serif;
     margin: 0;
     padding: 0;
-    font-family: "poppins", sans-serif;
     box-sizing: border-box;
 }
 
 body {
-    background: rgb(175, 161, 201);
+    background: #151515;
     min-height: 100vh;
     display: flex;
-    align-items: center;
     justify-content: center;
+    align-items: center;
 }
 
 .container {
-    background: #fff;
+    background: #fdfaf3;
     padding: 25px;
     width: 500px;
     border-radius: 10px;
@@ -96,14 +102,22 @@ li {
 }
 
 .version {
-  position: fixed;
-  bottom: 10px;
-  width: 100%;
-  text-align: center;
-  color: rgb(58, 44, 86);
-  font-size: 14px;
+    position: fixed;
+    bottom: 10px;
+    width: 100%;
+    text-align: center;
+    color: rgb(58, 44, 86);
+    font-size: 14px;
 }
 
 li div {
     user-select: none;
+}
+
+h5 {
+    text-align: center;
+    margin-bottom: 10px;
+    color: #753aac;
+    font-weight: 800;
+    font-family: "nunito", sans-serif;
 }
