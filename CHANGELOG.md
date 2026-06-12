@@ -1,9 +1,14 @@
 # Changelog
 
+## v2.0.2
+- Added task animation for creating/deleting
+- Improved task input feedback messages with animation
+
+---
+
 ## v2.0.1
 - Add task input feedback messages 
 - Update UI background
-- Added task animation for creating/deleting
 
 ---
 
