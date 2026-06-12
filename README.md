@@ -2,9 +2,9 @@ Eine einfache To-Do-Liste-Anwendung, entwickelt mit HTML, CSS und JavaScript.
 
 ## Über das Projekt
 
-Ich habe dieses Projekt entwickelt, um JavaScript, HMTL und CSS praktisch zu lernen und meine Kenntnisse durch eigene Umsetzung zu verbessern.
+Ich habe dieses Projekt entwickelt, um meine Kenntnisse in JavaScript, HTML und CSS praktisch anzuwenden und zu vertiefen.
 
-Die Anwendung ermöglicht es, Aufgaben zu erstellen, zu bearbeiten, zu löschen und als erledigt zu markieren. Das Projekt entwickelt sich stetig weiter. Dabei lerne ich neue Konzepte, entdecke Fehler im Code und verbessere die Anwendung laufend.
+Die Anwendung ermöglicht es, Aufgaben zu erstellen, zu bearbeiten, zu löschen und als erledigt zu markieren. Dabei erweitere ich das Projekt kontinuierlich, lerne neue Konzepte kennen, behebe Fehler und verbessere die Anwendung Schritt für Schritt.
 
 ## Funktionen
 
@@ -29,11 +29,13 @@ Die Anwendung ermöglicht es, Aufgaben zu erstellen, zu bearbeiten, zu löschen 
 
 ## Aktueller Status
 
-Das Projekt befindet sich noch in Arbeit. Neue Funktionen und Verbesserungen werden regelmäßig hinzugefügt.
+Dieses Projekt ist für mich ein laufender Lernprozess. Ich arbeite regelmäßig daran, neue Funktionen einzubauen, bestehende Abläufe zu verbessern und meinen Code zu optimieren. Mit jedem Update lerne ich neue Techniken kennen und sammle weitere praktische Erfahrung in der Webentwicklung.
 
 ## Hinweis
 
-Der Quellcode und die Kommentare sind aktuell auf Englisch geschrieben, da dies in der Softwareentwicklung üblich ist und die Zusammenarbeit in internationalen Teams erleichtert.
+## Hinweis
+
+Den Quellcode und die Kommentare habe ich auf Englisch verfasst. So gewöhne ich mich an die Arbeitsweise, die in vielen Projekten und Entwicklungsteams üblich ist.
 
 ## Autor
 
