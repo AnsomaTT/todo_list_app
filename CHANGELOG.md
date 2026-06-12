@@ -3,6 +3,7 @@
 ## v2.0.1
 - Add task input feedback messages 
 - Update UI background
+- Added task animation for creating/deleting
 
 ---
 

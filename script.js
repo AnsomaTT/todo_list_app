@@ -23,8 +23,6 @@ let storedTasks = GetLocalStorageTasksValue()
 
 // Detect when Enter key is pressed in the input field and automatically click the add/update button
 taskInput.addEventListener("keypress", function (keyboardEvent) {
-    SetAlertMessage("");
-
     if (keyboardEvent.key === "Enter") {
         SetAlertMessage("Task item created succesfully.")
         // Call the function set to the addTaskBtn (Add or Edit task)
@@ -103,7 +101,7 @@ function OnAddTaskClick() {
     // Check if the task input field is empty
     // If it is, display an alert message and stop the function
     if (taskText === "") {
-        return SetAlertMessage("Please Enter your task text!");
+        return SetAlertMessage("Please enter the text of your task!");
     }
 
     // Create a new task item (li) and define its HTML content for the task text and action buttons (Edit/Delete)
@@ -118,6 +116,8 @@ function OnAddTaskClick() {
 
     // Reset the input field so the user can type a new task
     taskInput.value = "";
+
+    SetAlertMessage("Task item created successfully.")
 }
 
 /**
@@ -270,6 +270,15 @@ function DeleteTask(deleteButtonElement) {
 
     // Display a message asking if the user is sure to delete the task
     if (confirm(`Are you sure? Do you want to delete ${textTaskToDelete}?`)) {
+
+        // Add the class to add the delete animation on the element
+        elementToDelete.classList.add("deleted-item");
+
+        // Wait for animation to finish before removing the element from the UI
+        elementToDelete.addEventListener("animationend", () => {
+            elementToDelete.remove();
+        });
+
         // Filter the copy of the local storage to remove the task to delete
         storedTasks = storedTasks.filter(
             task => task.taskText !== textTaskToDelete
@@ -277,9 +286,6 @@ function DeleteTask(deleteButtonElement) {
 
         // Save the current tasks list to localStorage
         SetLocalStorageTasksValue();
-
-        // Remove the task from the UI
-        elementToDelete.remove();
     }
 }
 
